@@ -11,7 +11,13 @@ model User {
   id        String   @id @default(uuid())
   name      String
   email     String   @unique
+  phone     String?
+  birthdate DateTime?
+  address   String?
+  city      String?
+  state     String?
+  zipCode   String?
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-  deletedAt DateTime? // Soft delete
+  deletedAt DateTime?
 }
