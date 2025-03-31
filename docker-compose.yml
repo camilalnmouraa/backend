@@ -1,0 +1,45 @@
+services:
+  postgres:
+    image: postgres
+    container_name: risu-postgres
+    restart: always
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: 123456
+      POSTGRES_DB: risu
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+  api:
+    build: .
+    container_name: risu-api
+    depends_on:
+      - postgres
+    ports:
+      - "3333:3333"
+    environment:
+      DATABASE_URL: postgresql://postgres:123456@postgres:5432/risu?schema=public
+    volumes:
+      - .:/app
+    command: >
+      sh -c "npx prisma migrate dev --name init &&
+            npx prisma generate &&
+            npx ts-node-dev src/index.ts"
+
+  studio:
+    build: .
+    container_name: risu-studio
+    depends_on:
+      - postgres
+    ports:
+      - "5555:5555"
+    environment:
+      DATABASE_URL: postgresql://postgres:123456@postgres:5432/risu?schema=public
+    command: npx prisma studio --port 5555
+    volumes:
+      - .:/app
+
+volumes:
+  pgdata:

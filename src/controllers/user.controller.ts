@@ -7,6 +7,7 @@ export const UserController: {
   create: RequestHandler
   update: RequestHandler
   delete: RequestHandler
+  restore: RequestHandler
 } = {
   index: async (_req, res) => {
     const users = await UserService.getAll()
@@ -26,9 +27,9 @@ export const UserController: {
   },
 
   create: async (req, res) => {
-    const { name, email } = req.body
-    const user = await UserService.create(name, email)
-    res.status(201).json(user)
+    const { name, email } = req.body;
+    const user = await UserService.create(name, email);
+    res.status(201).json(user);
   },
 
   update: async (req, res) => {
@@ -43,4 +44,10 @@ export const UserController: {
     await UserService.remove(id)
     res.status(204).send()
   },
+
+  restore: async (req: Request, res: Response) => {
+    const { id } = req.params
+    const user = await UserService.restore(id)
+    res.status(200).json(user)
+  }  
 }

@@ -8,5 +8,6 @@ userRoutes.get('/:id', UserController.show)
 userRoutes.post('/', UserController.create)
 userRoutes.put('/:id', UserController.update)
 userRoutes.delete('/:id', UserController.delete)
+userRoutes.patch('/:id/restore', UserController.restore)
 
 export { userRoutes }
